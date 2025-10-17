@@ -17,7 +17,7 @@ class WasRun(TestCase):
     def __init__(self, name: str):
         self.wasSetUp: int | None = None
         self.wasRun: int | None = None
-        TestCase.__init__(self, name)
+        super().__init__(name)
 
     def testMethod(self):
         self.wasRun = 1
@@ -28,15 +28,21 @@ class WasRun(TestCase):
         self.wasSetUp = 1
 
 class TestCaseTest(TestCase):
+    def __init__(self, name: str):
+        self.test: WasRun
+        super().__init__(name)
+
+    @override
+    def setUp(self):
+        self.test = WasRun("testMethod")
+
     def testRunning(self):
-        test = WasRun("testMethod")
-        test.run()
-        assert(test.wasRun)
+        self.test.run()
+        assert(self.test.wasRun)
 
     def testSetUp(self):
-        test = WasRun("testMethod")
-        test.run()
-        assert(test.wasSetUp)
+        self.test.run()
+        assert(self.test.wasSetUp)
 
 print('running tests')
 TestCaseTest("testRunning").run()
