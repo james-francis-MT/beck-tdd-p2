@@ -2,6 +2,6 @@ from src.test_framework import WasRun
 
 def test_test_framework():
     test = WasRun("testMehod")
-    print(test.wasRun)
+    assert(test.wasRun == None)
     test.testMethod()
-    print(test.wasRun)
+    assert(test.wasRun == 1)
