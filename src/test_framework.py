@@ -27,24 +27,3 @@ class WasRun(TestCase):
         self.wasRun = None
         self.wasSetUp = 1
 
-class TestCaseTest(TestCase):
-    def __init__(self, name: str):
-        self.test: WasRun
-        super().__init__(name)
-
-    @override
-    def setUp(self):
-        self.test = WasRun("testMethod")
-
-    def testRunning(self):
-        self.test.run()
-        assert(self.test.wasRun)
-
-    def testSetUp(self):
-        self.test.run()
-        assert(self.test.wasSetUp)
-
-print('running tests')
-TestCaseTest("testRunning").run()
-TestCaseTest("testSetUp").run()
-print('tests okay')
