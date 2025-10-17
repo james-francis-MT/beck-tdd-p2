@@ -24,12 +24,12 @@ class WasRun(TestCase):
 
     @override
     def setUp(self):
+        self.wasRun = None
         self.wasSetUp = 1
 
 class TestCaseTest(TestCase):
     def testRunning(self):
         test = WasRun("testMethod")
-        assert(not test.wasRun)
         test.run()
         assert(test.wasRun)
 
