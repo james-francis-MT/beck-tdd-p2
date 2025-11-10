@@ -11,8 +11,11 @@ class TestCase:
         result = TestResult()
         result.testStarted()
         self.setUp()
-        method = cast(Callable[[], None], getattr(self, self.name))
-        method()
+        try:
+            method = cast(Callable[[], None], getattr(self, self.name))
+            method()
+        except:
+            result.testFailed()
         self.tearDown()
         return result
 
@@ -44,10 +47,14 @@ class WasRun(TestCase):
 class TestResult:
     def __init__(self):
         self.runCount: int = 0
+        self.errorCount: int = 0
 
     def testStarted(self):
         self.runCount += 1
 
+    def testFailed(self):
+        self.errorCount += 1
+
     def summary(self):
-        return "%d run, 0 failed" % self.runCount
+        return "%d run, %d failed"%(self.runCount, self.errorCount)
 

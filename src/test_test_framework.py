@@ -1,5 +1,5 @@
 from typing import override
-from .test_framework import TestCase, WasRun
+from .test_framework import TestCase, WasRun, TestResult
 
 class TestCaseTest(TestCase):
     def __init__(self, name: str):
@@ -25,8 +25,15 @@ class TestCaseTest(TestCase):
         result = test.run()
         assert("1 run, 1 failed" == result.summary())
 
+    def testFailedResultFormatting(self):
+        result = TestResult()
+        result.testStarted()
+        result.testFailed()
+        assert("1 run, 1 failed" == result.summary())
+
 print('running tests')
-TestCaseTest("testTemplateMethod").run()
-TestCaseTest("testResult").run()
-TestCaseTest("testFailedResult").run()
+print(TestCaseTest("testTemplateMethod").run().summary())
+print(TestCaseTest("testResult").run().summary())
+print(TestCaseTest("testFailedResult").run().summary())
+print(TestCaseTest("testFailedResultFormatting").run().summary())
 print('tests okay')
