@@ -1,5 +1,19 @@
 from typing import Callable, cast, override
 
+class TestResult:
+    def __init__(self):
+        self.runCount: int = 0
+        self.errorCount: int = 0
+
+    def testStarted(self):
+        self.runCount += 1
+
+    def testFailed(self):
+        self.errorCount += 1
+
+    def summary(self):
+        return "%d run, %d failed"%(self.runCount, self.errorCount)
+
 class TestCase:
     def __init__(self, name: str):
         self.name: str = name
@@ -7,8 +21,7 @@ class TestCase:
     def setUp(self):
         pass
 
-    def run(self):
-        result = TestResult()
+    def run(self, result: TestResult):
         result.testStarted()
         self.setUp()
         try:
@@ -17,7 +30,6 @@ class TestCase:
         except:
             result.testFailed()
         self.tearDown()
-        return result
 
     def tearDown(self):
         pass
@@ -44,17 +56,17 @@ class WasRun(TestCase):
     def tearDown(self):
         self.log = self.log + "tearDown "
 
-class TestResult:
+
+class TestSuite():
     def __init__(self):
-        self.runCount: int = 0
-        self.errorCount: int = 0
+        self.tests: list[TestCase] = []
 
-    def testStarted(self):
-        self.runCount += 1
+    def add(self, test: TestCase):
+        self.tests.append(test)
 
-    def testFailed(self):
-        self.errorCount += 1
+    def run(self, result: TestResult):
+        for test in self.tests:
+            test.run(result)
 
-    def summary(self):
-        return "%d run, %d failed"%(self.runCount, self.errorCount)
+
 
