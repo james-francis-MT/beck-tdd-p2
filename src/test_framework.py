@@ -11,19 +11,27 @@ class TestCase:
         self.setUp()
         method = cast(Callable[[], None], getattr(self, self.name))
         method()
+        self.tearDown()
 
+    def tearDown(self):
+        pass
 
 class WasRun(TestCase):
     def __init__(self, name: str):
-        self.wasSetUp: int | None = None
         self.wasRun: int | None = None
+        self.log: str = ""
         super().__init__(name)
 
     def testMethod(self):
         self.wasRun = 1
+        self.log = self.log + "testMethod "
 
     @override
     def setUp(self):
         self.wasRun = None
-        self.wasSetUp = 1
+        self.log = "setUp "
+
+    @override
+    def tearDown(self):
+        self.log = self.log + "tearDown "
 
