@@ -8,10 +8,13 @@ class TestCase:
         pass
 
     def run(self):
+        result = TestResult()
+        result.testStarted()
         self.setUp()
         method = cast(Callable[[], None], getattr(self, self.name))
         method()
         self.tearDown()
+        return result
 
     def tearDown(self):
         pass
@@ -26,6 +29,9 @@ class WasRun(TestCase):
         self.wasRun = 1
         self.log = self.log + "testMethod "
 
+    def testBrokenMethod(self):
+        raise Exception
+
     @override
     def setUp(self):
         self.wasRun = None
@@ -34,4 +40,14 @@ class WasRun(TestCase):
     @override
     def tearDown(self):
         self.log = self.log + "tearDown "
+
+class TestResult:
+    def __init__(self):
+        self.runCount: int = 0
+
+    def testStarted(self):
+        self.runCount += 1
+
+    def summary(self):
+        return "%d run, 0 failed" % self.runCount
 
